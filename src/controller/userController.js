@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import UserSvc from "../service/userService";
 import { Jwt } from "../utils/jwt";
 import { User } from "../database/models";
-import sendSMS from "../utils/sendSMS";
+import sendEmail from "../utils/sendEmail";
 
 const saltRounds = Number(process.env.SALTROUNDS) || 10;
 
@@ -25,7 +25,7 @@ class Users {
           subject: "Account Verification",
           message: `Your OTP is: ${otpCode}`,
         };
-        await sendSMS(payload);
+        await sendEmail(payload);
         return res.status(200).json({
           status: "success",
           message: "Please check your email for OTP code",
@@ -73,7 +73,7 @@ class Users {
           subject: "Account Verification",
           message: `Your OPT is: ${otpCode}`,
         };
-        await sendSMS(payload);
+        await sendEmail(payload);
         return res.status(200).json({
           status: "success",
           message: "Please check your email for OTP code to login",
@@ -206,7 +206,7 @@ class Users {
         subject: "Resending One-Time-Password",
         message: `Your OTP is: ${otpCode}`,
       };
-      await sendSMS(payload);
+      await sendEmail(payload);
       return res
         .status(200)
         .json({ message: "OTP resent! Please check your email for the code" });
@@ -234,7 +234,7 @@ class Users {
         subject: "Forgot Password",
         message: `Your OTP is: ${otpCode}`,
       };
-      await sendSMS(payload);
+      await sendEmail(payload);
       return res.status(200).json({
         status: "success",
         message:

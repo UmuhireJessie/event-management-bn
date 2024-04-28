@@ -19,7 +19,7 @@ class Admin {
           subject: "Account Verification",
           message: `Your OTP is: ${otpCode} and your Password is ${req.body.password}.\nYou can change the password after verifying your account`,
         };
-        await sendSMS(payload);
+        await sendEmail(payload);
         return res.status(201).json({
           status: "success",
           message: "Admin created successfully",

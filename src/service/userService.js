@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { User } from "../database/models";
-import { Op } from 'sequelize';
+import { Op } from "sequelize";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,7 +19,7 @@ class UserSvc {
     return formattedPhoneNumber;
   }
 
-  static async register(data, isAdmin=null) {
+  static async register(data, isAdmin = null) {
     data.password = await bcrypt.hash(data.password, saltRounds);
     const { firstName, lastName, email, password, phoneNumber } = data;
     const phoneN = UserSvc.reformatPhoneNumber(phoneNumber);
@@ -45,7 +45,7 @@ class UserSvc {
         firstName,
         lastName,
         email,
-        role: isAdmin ? 'admin' : spectator,
+        role: isAdmin ? "admin" : "spectator",
         password,
         phoneNumber: phoneN,
       });
