@@ -43,6 +43,8 @@ This script starts the application in the development mode, consult `package.jso
 API JSON based web API based on OpenAPI: http://localhost:9010/api-docs/
 Note that the 9010 is the default port, replace it with the port you chose if you have passed a different one in your `.env` file
 
+## Event Management Platform
+[Here](https://github.com/UmuhireJessie/event-management-fn) is the link to the frontend of the Event Management Platform.
 
 ## Author and Acknowledgement
 Jessie Umuhire Umutesi
