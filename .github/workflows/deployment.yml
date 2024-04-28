@@ -1,0 +1,57 @@
+name: Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Deploy Image
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKERHUB_USERNAME: ujessie
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Variables
+        id: vars
+        run: |
+          echo "##[set-output name=commit;]$(echo $GITHUB_SHA | head -c7)"
+      - name: Log In to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and Push
+        id: build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ujessie/event:backend-${{ steps.vars.outputs.commit }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
+
+      - name: Move Cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+#      - name: Deploy Image
+#        uses: fjogeleit/http-request-action@v1
+#        with:
+#          url: http://144.126.157.125:9000/api/webhooks/0940fedc-4706-469f-a457-5848dbf6427c?tag=api-${{steps.vars.outputs.commit}}
+#          method: POST
