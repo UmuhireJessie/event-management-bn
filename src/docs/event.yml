@@ -1,0 +1,886 @@
+/api/v1/users/register:
+  post:
+    tags:
+      - Users
+    summary: Create a new user account
+    description: Create a new user account
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              email:
+                type: string
+                example: johndoe@gmail.com
+              phoneNumber:
+                type: string
+                example: "250790000000"
+              password:
+                type: string
+                example: 123@Pass
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/register-admin:
+  post:
+    tags:
+      - Admin
+    summary: Create a new admin account
+    description: Create a new admin account
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              email:
+                type: string
+                example: johndoe@gmail.com
+              phoneNumber:
+                type: string
+                example: "250790000000"
+              password:
+                type: string
+                example: 123@Pass
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/login:
+  post:
+    tags:
+      - Users
+    summary: Login to your user account
+    description: Login to your user account by providing a phone number or email along with the password.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              identifier:
+                type: string
+                example: "250790000000"
+              password:
+                type: string
+                example: 123@Pass
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "404":
+        description: Account does not exist
+      "500":
+        description: Internal Server Error
+        
+
+/api/v1/users/verify-otp:
+  post:
+    tags:
+      - Users
+    summary: verify your otp code
+    description: verify your otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250790000000"
+              otp:
+                type: number
+                example: 1234
+
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: invalid otp code
+      "403":
+        description: Otp code has expired
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/all:
+  get:
+    tags:
+      - Admin
+    summary: get all users
+    description: get all users
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/change-password:
+  patch:
+    tags:
+      - Users
+    summary: change old password
+    description: change old password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              oldPassword:
+                type: string
+                example: 123@Pass
+              newPassword:
+                type: string
+                example: 123@Pass
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/forgot-password:
+  post:
+    tags:
+      - Users
+    summary: Forgot password
+    description: Forgot password
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250790000000"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/resend-otp:
+  post:
+    tags:
+      - Users
+    summary: resend otp code
+    description: resend otp code
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              phoneNumber:
+                type: string
+                example: "250790000000"
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/reset-password/{otpCode}:
+  post:
+    tags:
+      - Users
+    summary: Reset password
+    description: Reset password
+    parameters:
+      - name: otpCode
+        in: path
+        required: true
+        description: The otpCode received on your email
+        type: number
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              newPassword:
+                type: string
+                example: 123@Pass
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/profile:
+  get:
+    tags:
+      - Users
+    summary: get user profile
+    description: get user profile
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/profiles:
+  patch:
+    tags:
+      - Users
+    summary: Update user profile
+    description: Update user profile
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              email:
+                type: string
+                example: johndoe@gmail.com
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/status/{id}:
+  patch:
+    tags:
+      - Admin
+    summary: changing status of a user
+    description: changing status of a user
+    parameters:
+      - name: id
+        in: path
+        description: id of the user to change status
+        required: true
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+/api/v1/users/{id}:
+  get:
+    tags:
+      - Admin
+    summary: getting a user by id
+    description: getting a user by id
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of the user to retrieve
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+  patch:
+    tags:
+      - Admin
+    summary: update a user by id
+    description: update a user by id
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of the user to update
+        type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: John
+              lastName:
+                type: string
+                example: Doe
+              gender:
+                type: string
+                example: male
+              email:
+                type: string
+                example: johndoe@gmail.com
+
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+  delete:
+    tags:
+      - Admin
+    summary: delete a user by id
+    description: delete a user by id
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of the user to delete
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAauthorized
+      "403":
+        description: Forbidden
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+/api/v1/notifications/all:
+  get:
+    tags:
+      - Admin
+    summary: get all notifications
+    description: get all notifications
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+/api/v1/notifications/single:
+  get:
+    tags:
+      - Notification
+    summary: get all logged in user notifications
+    description: get all logged in user notifications
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAuthorized
+      "500":
+        description: Internal Server Error
+/api/v1/notifications/{id}:
+  delete:
+    tags:
+      - Notification
+    summary: Delete a notification of a logged in user
+    description: Delete a notification of a logged in user
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of the notification to delete
+        type: string
+    security:
+      - {}
+      - bearerAuth: []
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "401":
+        description: UnAuthorized
+      "500":
+        description: Internal Server Error
+
+/api/v1/events:
+  post:
+    tags:
+      - Admin
+    summary: Adding a new event by admin 
+    description: Adding a new event by admin
+    security:
+      - {}
+      - bearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Bal Playoff Game 1
+              description:
+                type: string
+                example: Come and enjoy Bal Playoff Games with your favorite artists in Rwanda. They will be Bushali, Kivumbi, Alyn Sano, and more...
+              eventDate:
+                type: string
+                format: date-time
+                example: "2024-02-02T12:20:00Z"
+              location:
+                type: string
+                example: Kigali Arena
+              ticket:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    amount:
+                      type: number
+                    availableSeats:
+                      type: number
+                example:
+                  - type: Regular
+                    amount: 2000
+                    availableSeats: 30000
+                  - type: VIP
+                    amount: 5000
+                    availableSeats: 10000
+                  - type: VVIP
+                    amount: 10000
+                    availableSeats: 5000
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/events/all:
+  get:
+    tags:
+      - Event
+    summary: get all events available in system
+    description: get all events available in system
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/events/{id}:
+  get:
+    tags:
+      - Event
+    summary: Get one event
+    description: Get one event 
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      "200":
+        description: Successful operation
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+  patch:
+    tags:
+      - Admin
+    summary: Updating an event by the admin
+    description: Updating an event by the admin
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: Bal Playoff Game 1
+              description:
+                type: string
+                example: Come and enjoy Bal Playoff Games with your favorite artists in Rwanda. They will be Bushali, Kivumbi, Alyn Sano, and more...
+              eventDate:
+                type: string
+                format: date-time
+                example: "2024-02-02T12:20:00Z"
+              location:
+                type: string
+                example: Kigali Arena
+              ticket:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    amount:
+                      type: number
+                    availableSeats:
+                      type: number
+                example:
+                  - type: Regular
+                    amount: 2000
+                    availableSeats: 30000
+                  - type: VIP
+                    amount: 5000
+                    availableSeats: 10000
+                  - type: VVIP
+                    amount: 10000
+                    availableSeats: 5000
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+  delete:
+    tags:
+      - Admin
+    summary: Delete an event by admin
+    description: Delete an event by admin 
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+    responses:
+      "200":
+        description: Successful operation
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+/api/v1/bookings/event/{id}:
+  post:
+    tags:
+      - Booking
+    summary: Booking an available event
+    description: Booking an available event
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: Event ID you want to book
+        required: true
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bookedTickets:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    amount:
+                      type: number
+                    bookedSeats:
+                      type: number
+                example:
+                  - type: Regular
+                    amount: 2000
+                    bookedSeats: 1
+                  - type: VIP
+                    amount: 5000
+                    bookedSeats: 2
+    responses:
+      "201":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/bookings/all:
+  get:
+    tags:
+      - Admin
+    summary: Get all bookings available in system by the admin
+    description: Get all bookings available in system by the admin
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/bookings/single:
+  get:
+    tags:
+      - Booking
+    summary: Get all user bookings available in system
+    description: Get all user bookings available in system
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: page
+        in: query
+      - name: pageSize
+        in: query
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "500":
+        description: Internal Server Error
+
+/api/v1/bookings/{id}:
+  get:
+    tags:
+      - Booking
+    summary: Get one booking
+    description: Get one booking 
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        description: id of the booking to retrieve
+        required: true
+    responses:
+      "200":
+        description: Successful operation
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+  patch:
+    tags:
+      - Booking
+    summary: Updating a booking made
+    description: Updating a booking made
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of the booking to update
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bookedTickets:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    amount:
+                      type: number
+                    bookedSeats:
+                      type: number
+                example:
+                  - type: Regular
+                    amount: 2000
+                    bookedSeats: 1
+                  - type: VIP
+                    amount: 5000
+                    bookedSeats: 2
+    responses:
+      "200":
+        description: Successful operation
+      "400":
+        description: Bad Request
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
+
+  delete:
+    tags:
+      - Booking
+    summary: Delete a booking made
+    description: Delete a booking made 
+    security:
+      - {}
+      - bearerAuth: []
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: id of a booking to delete
+    responses:
+      "200":
+        description: Successful operation
+      "404":
+        description: Not Found
+      "500":
+        description: Internal Server Error
